@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="דף זיכרון לגילי דה פז">
+    <title>לזכר גילי דה פז</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=David+Libre:wght@400;700&family=Heebo:wght@300;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --vh: 1vh;
+            --background: #ffffff;
+            --text: #7a7a7a;
+            --highlight: #636363;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --form-bg: rgba(255, 255, 255, 0.95);
+            --spacing-unit: max(0.8vh, 6px);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 16px;
+            height: 100%;
+        }
+
+        @media (min-width: 768px) {
+            html {
+                font-size: 18px;
+            }
+        }
+
+        @media (min-width: 1200px) {
+            html {
+                font-size: 20px;
+            }
+        }
+
+        body {
+            font-family: 'David Libre', serif;
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: calc(var(--spacing-unit) * 2);
+            overflow: hidden;
+            position: relative;
+        }
+
+        #background-video {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: -1;
+            object-fit: cover;
+            opacity: 0.25;
+            transform: scale(1.1);
+            filter: blur(1px);
+        }
+
+        .container {
+            width: min(100%, 800px);
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: calc(var(--spacing-unit) * 1.5);
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+            padding: calc(var(--spacing-unit) * 2);
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 20px;
+        }
+
+        .memorial-date {
+            font-size: clamp(0.8rem, 1.5vw, 1.2rem);
+            font-weight: 400;
+            color: var(--highlight);
+            text-align: center;
+            margin-top: calc(var(--spacing-unit) * -0.5);
+            opacity: 0.9;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .main-title {
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            font-weight: 700;
+            color: var(--highlight);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            line-height: 1.2;
+            text-align: center;
+        }
+
+        .candle {
+            width: 60px;
+            height: 120px;
+            position: relative;
+            margin: calc(var(--spacing-unit) * 2) auto;
+        }
+
+        .flame {
+            position: absolute;
+            width: 20px;
+            height: 40px;
+            background: linear-gradient(#ffdd44, #ff8844);
+            border-radius: 50% 50% 20% 20%;
+            top: -20px;
+            left: 20px;
+            animation: flicker 1s ease-in-out infinite alternate;
+            transform-origin: 50% 90%;
+            box-shadow: 0 0 20px #ff6600, 0 0 40px #ff8844;
+        }
+
+        .wick {
+            position: absolute;
+            width: 4px;
+            height: 12px;
+            background: #2c2c2c;
+            top: 20px;
+            left: 28px;
+        }
+
+        .wax {
+            position: absolute;
+            width: 30px;
+            height: 90px;
+            background: linear-gradient(to right, #ddd, #fff, #ddd);
+            border-radius: 4px;
+            bottom: 0;
+            left: 15px;
+            box-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .image-carousel {
+            width: min(350px, 90vw);
+            height: min(350px, 90vw);
+            position: relative;
+            overflow: hidden;
+            border-radius: 50%;
+            margin: calc(var(--spacing-unit)) auto;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
+
+        .carousel-image {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            object-fit: cover;
+        }
+
+        .carousel-image.active {
+            opacity: 1;
+        }
+
+        .memorial-text {
+            font-size: clamp(0.9rem, 1.8vw, 1.2rem);
+            line-height: 1.6;
+            color: var(--text);
+            white-space: pre-line;
+            text-align: center;
+            opacity: 0;
+            max-width: min(90%, 800px);
+            margin: 0 auto;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            font-weight: 400;
+        }
+
+                @keyframes bikeMove {
+            0% { transform: translate(0, 0) rotate(0); }
+            25% { transform: translate(0, -5px) rotate(1deg); }
+            50% { transform: translate(0, 0) rotate(0); }
+            75% { transform: translate(0, -5px) rotate(-1deg); }
+            100% { transform: translate(0, 0) rotate(0); }
+        }
+
+        .bike-animation {
+            width: 200px;
+            height: auto;
+            display: block;
+            margin: calc(var(--spacing-unit) * 2) auto;
+            animation: bikeMove 4s ease-in-out infinite;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));
+        }
+
+        @keyframes flicker {
+            0%, 100% { transform: scale(1) rotate(-2deg); opacity: 0.9; }
+            25% { transform: scale(1.1) rotate(2deg); opacity: 1; }
+            50% { transform: scale(0.9) rotate(-1deg); opacity: 0.8; }
+            75% { transform: scale(1.05) rotate(1deg); opacity: 0.95; }
+        }
+
+        .audio-controls {
+            position: fixed;
+            bottom: calc(var(--spacing-unit) * 2);
+            left: calc(var(--spacing-unit) * 2);
+            width: 40px;
+            height: 30px;
+            cursor: pointer;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding: 2px;
+            text-decoration: none;
+        }
+
+        .audio-controls:hover .equalizer-bar {
+            opacity: 1;
+        }
+
+        .equalizer-bar {
+            width: 4px;
+            background: var(--highlight);
+            opacity: 0.7;
+            border-radius: 2px;
+        }
+
+        .equalizer-bar:nth-child(1) { animation: equalize 1s ease-in-out infinite; }
+        .equalizer-bar:nth-child(2) { animation: equalize 1s ease-in-out infinite 0.2s; }
+        .equalizer-bar:nth-child(3) { animation: equalize 1s ease-in-out infinite 0.4s; }
+        .equalizer-bar:nth-child(4) { animation: equalize 1s ease-in-out infinite 0.6s; }
+        .equalizer-bar:nth-child(5) { animation: equalize 1s ease-in-out infinite 0.8s; }
+
+        @keyframes equalize {
+            0%, 100% { height: 8px; }
+            50% { height: 25px; }
+        }
+
+        .loading-overlay {
+            position: fixed;
+            inset: 0;
+            background: var(--background);
+            display: grid;
+            place-items: center;
+            z-index: 2000;
+            transition: opacity 0.5s ease-out;
+        }
+
+        .loader {
+            width: clamp(2rem, 5vw, 3rem);
+            height: clamp(2rem, 5vw, 3rem);
+            border: calc(var(--spacing-unit) * 0.3) solid var(--highlight);
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                gap: calc(var(--spacing-unit));
+                width: 95%;
+                padding: calc(var(--spacing-unit));
+            }
+            
+            .main-title {
+                font-size: clamp(1.2rem, 4vw, 1.8rem);
+            }
+            
+            .memorial-date {
+                font-size: clamp(0.7rem, 3vw, 1rem);
+            }
+            
+            .memorial-text {
+                font-size: clamp(0.8rem, 3vw, 1.1rem);
+            }
+
+            .bike-image {
+                max-width: 150px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: calc(var(--spacing-unit));
+            }
+
+            .container {
+                padding: calc(var(--spacing-unit) * 0.5);
+            }
+        }
+    </style>
+</head>
+<body>
+    <video id="background-video" autoplay loop muted playsinline>
+        <source src="vid/vid.mp4" type="video/mp4">
+    </video>
+
+    <div class="loading-overlay">
+        <div class="loader"></div>
+    </div>
+
+    <audio id="bgMusic" loop autoplay>
+        <source src="images/progrom.mp3" type="audio/mpeg">
+        הדפדפן שלך אינו תומך בנגינת מוזיקה.
+    </audio>
+
+    <a href="https://www.youtube.com/watch?v=zz0cvJ_5TYQ&list=RDzz0cvJ_5TYQ&start_radio=1&ab_channel=Progrom" target="_blank" class="audio-controls">
+        <div class="equalizer-bar"></div>
+        <div class="equalizer-bar"></div>
+        <div class="equalizer-bar"></div>
+        <div class="equalizer-bar"></div>
+        <div class="equalizer-bar"></div>
+    </a>
+
+    <div class="container">
+        <div class="candle">
+            <div class="flame"></div>
+            <div class="wick"></div>
+            <div class="wax"></div>
+        </div>
+
+        <h1 class="main-title">לזכר אהובנו גילי דה פז</h1>
+        <div class="memorial-date">1968-2025 | י״ד באייר תשכ״ח - ב׳ בשבט תשפ״ה</div>
+
+        <div class="image-carousel">
+            <!-- Images will be added dynamically -->
+        </div>
+
+        <p id="memorialText" class="memorial-text">נשמה טהורה ואצילית שהאירה את חיינו בחיוך כובש ולב רחב.
+אהבת אדם ונתינה אין קץ היו נר לרגליך.
+השארת חותם עמוק בלב כל מי שזכה להכירך.</p>
+
+        <img src="images/bike.png" alt="אופנוע" class="bike-animation">
+    </div>
+
+    <script>
+        // הגדרת נתיבי התמונות
+        const IMAGES_CONFIG = {
+            mainImage: {
+                path: "images/gil.jpeg",
+                alt: "תמונה ראשית של גילי"
+            },
+            additionalImages: [
+                { path: "images/1.jpg", alt: "גילי בשלג" },         // תמונה 1
+                { path: "images/2.jpg", alt: "גילי בטיול" },        // תמונה 2
+                { path: "images/3.jpg", alt: "גילי מחייך" },        // תמונה 3
+                { path: "images/4.jpg", alt: "גילי על האופנוע" },   // תמונה 4
+                { path: "images/5.jpg", alt: "גילי עם חברים" },     // תמונה 5
+                { path: "images/7.jpg", alt: "גילי בבית" },         // תמונה 7
+                { path: "images/8.jpg", alt: "גילי בטבע" },         // תמונה 8
+                { path: "images/9.jpg", alt: "גילי בחגיגה" },       // תמונה 9
+                { path: "images/10.jpg", alt: "גילי בעבודה" },      // תמונה 10
+                { path: "images/11.jpg", alt: "גילי עם משפחה" },    // תמונה 11
+                { path: "images/12.jpg", alt: "גילי בנסיעה" },      // תמונה 12
+                { path: "images/13.jpg", alt: "גילי בים" },         // תמונה 13
+                { path: "images/14.jpg", alt: "גילי במסעדה" },      // תמונה 14
+                { path: "images/15.jpg", alt: "גילי בטיול" },       // תמונה 15
+                { path: "images/17.jpg", alt: "גילי עם חברים" },    // תמונה 17
+                { path: "images/18.jpg", alt: "גילי בחו״ל" },       // תמונה 18
+                { path: "images/19.jpg", alt: "גילי מחייך" },       // תמונה 19
+                { path: "images/20.jpg", alt: "גיליגמחייך" }        // תמונה 20
+            ]
+        };
+
+        const music = document.getElementById("bgMusic");
+        music.volume = 0.4;
+        let isPlaying = false;
+
+        function toggleMusic() {
+            const audioControl = document.querySelector('.audio-controls');
+            if (isPlaying) {
+                music.pause();
+                audioControl.classList.remove('playing');
+            } else {
+                music.play();
+                audioControl.classList.add('playing');
+            }
+            isPlaying = !isPlaying;
+        }
+
+        // Create and initialize image carousel
+        function createImageElements() {
+            const carousel = document.querySelector('.image-carousel');
+            
+            // Add main image (gil.jpeg)
+            const firstImg = document.createElement('img');
+            firstImg.src = IMAGES_CONFIG.mainImage.path;
+            firstImg.alt = IMAGES_CONFIG.mainImage.alt;
+            firstImg.className = 'carousel-image active';
+            carousel.appendChild(firstImg);
+            
+            // Add remaining images
+            IMAGES_CONFIG.additionalImages.forEach((image, index) => {
+                const img = document.createElement('img');
+                img.src = image.path;
+                img.alt = image.alt;
+                img.className = 'carousel-image';
+                carousel.appendChild(img);
+            });
+        }
+
+        function rotateImages() {
+            const images = document.querySelectorAll('.carousel-image');
+            let currentIndex = 0;
+
+            setInterval(() => {
+                images[currentIndex].classList.remove('active');
+                currentIndex = (currentIndex + 1) % images.length;
+                images[currentIndex].classList.add('active');
+            }, 5000);
+        }
+
+        function showContent() {
+            document.getElementById("memorialText").style.opacity = "1";
+        }
+
+        window.addEventListener('load', () => {
+            // Set video playback rate
+            const video = document.getElementById('background-video');
+            video.playbackRate = 0.75;
+
+            // Start music automatically
+            const music = document.getElementById("bgMusic");
+            music.volume = 0.4;
+            music.play().catch(function(error) {
+                console.log("Auto-play was prevented");
+            });
+
+            setTimeout(() => {
+                document.querySelector(".loading-overlay").style.opacity = "0";
+                setTimeout(() => {
+                    document.querySelector(".loading-overlay").style.display = "none";
+                    document.querySelector(".container").style.opacity = "1";
+                    setTimeout(showContent, 500);
+                }, 500);
+            }, 1000);
+
+            // Initialize carousel
+            createImageElements();
+            rotateImages();
+        });
+    </script>
+</body>
+</html>
