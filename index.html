@@ -183,21 +183,19 @@
             font-weight: 400;
         }
 
-                @keyframes bikeMove {
+        .bike-animation {
+            width: min(200px, 50vw);
+            margin: calc(var(--spacing-unit) * 2) auto;
+            animation: bikeMove 4s ease-in-out infinite;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));
+        }
+
+        @keyframes bikeMove {
             0% { transform: translate(0, 0) rotate(0); }
             25% { transform: translate(0, -5px) rotate(1deg); }
             50% { transform: translate(0, 0) rotate(0); }
             75% { transform: translate(0, -5px) rotate(-1deg); }
             100% { transform: translate(0, 0) rotate(0); }
-        }
-
-        .bike-animation {
-            width: 200px;
-            height: auto;
-            display: block;
-            margin: calc(var(--spacing-unit) * 2) auto;
-            animation: bikeMove 4s ease-in-out infinite;
-            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));
         }
 
         @keyframes flicker {
@@ -207,23 +205,18 @@
             75% { transform: scale(1.05) rotate(1deg); opacity: 0.95; }
         }
 
-        .audio-controls {
+        .equalizer-container {
             position: fixed;
             bottom: calc(var(--spacing-unit) * 2);
             left: calc(var(--spacing-unit) * 2);
             width: 40px;
             height: 30px;
-            cursor: pointer;
-            z-index: 1000;
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
             padding: 2px;
-            text-decoration: none;
-        }
-
-        .audio-controls:hover .equalizer-bar {
-            opacity: 1;
+            cursor: pointer;
+            z-index: 1000;
         }
 
         .equalizer-bar {
@@ -244,30 +237,11 @@
             50% { height: 25px; }
         }
 
-        .loading-overlay {
-            position: fixed;
-            inset: 0;
-            background: var(--background);
-            display: grid;
-            place-items: center;
-            z-index: 2000;
-            transition: opacity 0.5s ease-out;
-        }
-
-        .loader {
-            width: clamp(2rem, 5vw, 3rem);
-            height: clamp(2rem, 5vw, 3rem);
-            border: calc(var(--spacing-unit) * 0.3) solid var(--highlight);
-            border-radius: 50%;
-            border-top-color: transparent;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
         @media (max-width: 768px) {
+            body {
+                padding: calc(var(--spacing-unit));
+            }
+
             .container {
                 gap: calc(var(--spacing-unit));
                 width: 95%;
@@ -286,37 +260,42 @@
                 font-size: clamp(0.8rem, 3vw, 1.1rem);
             }
 
-            .bike-image {
-                max-width: 150px;
+            #background-video {
+                transform: scale(1.2);
+            }
+
+            .candle {
+                transform: scale(0.8);
             }
         }
 
         @media (max-width: 480px) {
             body {
-                padding: calc(var(--spacing-unit));
+                padding: calc(var(--spacing-unit) * 0.5);
             }
 
             .container {
                 padding: calc(var(--spacing-unit) * 0.5);
+            }
+
+            .candle {
+                transform: scale(0.7);
             }
         }
     </style>
 </head>
 <body>
     <video id="background-video" autoplay loop muted playsinline>
-        <source src="vid/vid.mp4" type="video/mp4">
+        <source src="./vid/vid.mp4" type="video/mp4">
     </video>
 
-    <div class="loading-overlay">
-        <div class="loader"></div>
-    </div>
-
     <audio id="bgMusic" loop autoplay>
-        <source src="images/progrom.mp3" type="audio/mpeg">
-        הדפדפן שלך אינו תומך בנגינת מוזיקה.
+        <source src="./music/progrom.mp3" type="audio/mpeg">
     </audio>
 
-    <a href="https://www.youtube.com/watch?v=zz0cvJ_5TYQ&list=RDzz0cvJ_5TYQ&start_radio=1&ab_channel=Progrom" target="_blank" class="audio-controls">
+    <a href="https://www.youtube.com/watch?v=zz0cvJ_5TYQ&list=RDzz0cvJ_5TYQ&start_radio=1&ab_channel=Progrom" 
+       target="_blank" 
+       class="equalizer-container">
         <div class="equalizer-bar"></div>
         <div class="equalizer-bar"></div>
         <div class="equalizer-bar"></div>
@@ -342,67 +321,70 @@
 אהבת אדם ונתינה אין קץ היו נר לרגליך.
 השארת חותם עמוק בלב כל מי שזכה להכירך.</p>
 
-        <img src="images/bike.png" alt="אופנוע" class="bike-animation">
+        <img src="./images/bike.png" alt="אופנוע" class="bike-animation">
     </div>
-
     <script>
-        // הגדרת נתיבי התמונות
         const IMAGES_CONFIG = {
             mainImage: {
-                path: "images/gil.jpeg",
+                path: "./images/gil.jpeg",
                 alt: "תמונה ראשית של גילי"
             },
             additionalImages: [
-                { path: "images/1.jpg", alt: "גילי בשלג" },         // תמונה 1
-                { path: "images/2.jpg", alt: "גילי בטיול" },        // תמונה 2
-                { path: "images/3.jpg", alt: "גילי מחייך" },        // תמונה 3
-                { path: "images/4.jpg", alt: "גילי על האופנוע" },   // תמונה 4
-                { path: "images/5.jpg", alt: "גילי עם חברים" },     // תמונה 5
-                { path: "images/7.jpg", alt: "גילי בבית" },         // תמונה 7
-                { path: "images/8.jpg", alt: "גילי בטבע" },         // תמונה 8
-                { path: "images/9.jpg", alt: "גילי בחגיגה" },       // תמונה 9
-                { path: "images/10.jpg", alt: "גילי בעבודה" },      // תמונה 10
-                { path: "images/11.jpg", alt: "גילי עם משפחה" },    // תמונה 11
-                { path: "images/12.jpg", alt: "גילי בנסיעה" },      // תמונה 12
-                { path: "images/13.jpg", alt: "גילי בים" },         // תמונה 13
-                { path: "images/14.jpg", alt: "גילי במסעדה" },      // תמונה 14
-                { path: "images/15.jpg", alt: "גילי בטיול" },       // תמונה 15
-                { path: "images/17.jpg", alt: "גילי עם חברים" },    // תמונה 17
-                { path: "images/18.jpg", alt: "גילי בחו״ל" },       // תמונה 18
-                { path: "images/19.jpg", alt: "גילי מחייך" },       // תמונה 19
-                { path: "images/20.jpg", alt: "גיליגמחייך" }        // תמונה 20
+                { path: "./images/1.jpg", alt: "תמונה 1" },
+                { path: "./images/2.jpg", alt: "תמונה 2" },
+                { path: "./images/3.jpg", alt: "תמונה 3" },
+                { path: "./images/4.jpg", alt: "תמונה 4" },
+                { path: "./images/5.jpg", alt: "תמונה 5" },
+                { path: "./images/6.jpg", alt: "תמונה 6" },
+                { path: "./images/7.jpg", alt: "תמונה 7" },
+                { path: "./images/8.jpg", alt: "תמונה 8" },
+                { path: "./images/9.jpg", alt: "תמונה 9" },
+                { path: "./images/10.jpg", alt: "תמונה 10" },
+                { path: "./images/11.jpg", alt: "תמונה 11" },
+                { path: "./images/12.jpg", alt: "תמונה 12" },
+                { path: "./images/13.jpg", alt: "תמונה 13" },
+                { path: "./images/14.jpg", alt: "תמונה 14" },
+                { path: "./images/15.jpg", alt: "תמונה 15" },
+                { path: "./images/16.jpg", alt: "תמונה 16" },
+                { path: "./images/17.jpg", alt: "תמונה 17" },
+                { path: "./images/18.jpg", alt: "תמונה 18" },
+                { path: "./images/19.jpg", alt: "תמונה 19" }
             ]
         };
 
-        const music = document.getElementById("bgMusic");
-        music.volume = 0.4;
-        let isPlaying = false;
+        window.addEventListener('load', () => {
+            const video = document.getElementById('background-video');
+            video.playbackRate = 0.75;
 
-        function toggleMusic() {
-            const audioControl = document.querySelector('.audio-controls');
-            if (isPlaying) {
-                music.pause();
-                audioControl.classList.remove('playing');
-            } else {
-                music.play();
-                audioControl.classList.add('playing');
-            }
-            isPlaying = !isPlaying;
-        }
+            const music = document.getElementById("bgMusic");
+            music.volume = 0.4;
+            music.play().catch(function(error) {
+                console.log("Auto-play was prevented");
+            });
 
-        // Create and initialize image carousel
+            setTimeout(() => {
+                document.querySelector(".loading-overlay")?.style.opacity = "0";
+                setTimeout(() => {
+                    document.querySelector(".loading-overlay")?.style.display = "none";
+                    document.querySelector(".container").style.opacity = "1";
+                    setTimeout(showContent, 500);
+                }, 500);
+            }, 1000);
+
+            createImageElements();
+            rotateImages();
+        });
+
         function createImageElements() {
             const carousel = document.querySelector('.image-carousel');
             
-            // Add main image (gil.jpeg)
             const firstImg = document.createElement('img');
             firstImg.src = IMAGES_CONFIG.mainImage.path;
             firstImg.alt = IMAGES_CONFIG.mainImage.alt;
             firstImg.className = 'carousel-image active';
             carousel.appendChild(firstImg);
             
-            // Add remaining images
-            IMAGES_CONFIG.additionalImages.forEach((image, index) => {
+            IMAGES_CONFIG.additionalImages.forEach((image) => {
                 const img = document.createElement('img');
                 img.src = image.path;
                 img.alt = image.alt;
@@ -425,32 +407,6 @@
         function showContent() {
             document.getElementById("memorialText").style.opacity = "1";
         }
-
-        window.addEventListener('load', () => {
-            // Set video playback rate
-            const video = document.getElementById('background-video');
-            video.playbackRate = 0.75;
-
-            // Start music automatically
-            const music = document.getElementById("bgMusic");
-            music.volume = 0.4;
-            music.play().catch(function(error) {
-                console.log("Auto-play was prevented");
-            });
-
-            setTimeout(() => {
-                document.querySelector(".loading-overlay").style.opacity = "0";
-                setTimeout(() => {
-                    document.querySelector(".loading-overlay").style.display = "none";
-                    document.querySelector(".container").style.opacity = "1";
-                    setTimeout(showContent, 500);
-                }, 500);
-            }, 1000);
-
-            // Initialize carousel
-            createImageElements();
-            rotateImages();
-        });
     </script>
 </body>
 </html>
