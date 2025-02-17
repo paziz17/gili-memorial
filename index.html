@@ -52,16 +52,16 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: calc(var(--spacing-unit) * 2);
-            overflow: hidden;
             position: relative;
             background: var(--background);
+            overflow-x: hidden;
         }
 
         #background-video {
             position: fixed;
-            right: 0;
-            bottom: 0;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             min-width: 100%;
             min-height: 100%;
             width: auto;
@@ -69,24 +69,26 @@
             z-index: -1;
             object-fit: cover;
             opacity: 0.25;
-            transform: scale(1.1);
             filter: blur(1px);
         }
 
-        .container {
-            width: min(100%, 800px);
-            margin: 0 auto;
+        @media (max-width: 768px) {
+            #background-video {
+                height: 100%;
+                width: 100%;
+                object-position: center;
+            }
+        }
+
+        .content-wrapper {
+            width: 100%;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: calc(var(--spacing-unit) * 1.5);
-            height: 100%;
-            opacity: 0;
-            transition: opacity 1.5s ease-in-out;
-            padding: calc(var(--spacing-unit) * 2);
             background: rgba(255, 255, 255, 0.85);
-            border-radius: 20px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 2rem 1rem;
+            gap: 2rem;
         }
 
         .memorial-date {
@@ -94,7 +96,6 @@
             font-weight: 400;
             color: var(--highlight);
             text-align: center;
-            margin-top: calc(var(--spacing-unit) * -0.5);
             opacity: 0.9;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
         }
@@ -112,7 +113,7 @@
             width: 60px;
             height: 120px;
             position: relative;
-            margin: calc(var(--spacing-unit) * 2) auto;
+            margin: 1rem auto;
         }
 
         .flame {
@@ -154,12 +155,11 @@
             position: relative;
             overflow: hidden;
             border-radius: 50%;
-            margin: calc(var(--spacing-unit)) auto;
+            margin: 1rem auto;
             background: #ffffff;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 0;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
 
@@ -202,7 +202,7 @@
             width: 200px;
             height: auto;
             display: block;
-            margin: calc(var(--spacing-unit) * 2) auto;
+            margin: 1rem auto;
             animation: bikeMove 4s ease-in-out infinite;
             filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));
         }
@@ -216,8 +216,8 @@
 
         .audio-controls {
             position: fixed;
-            bottom: calc(var(--spacing-unit) * 2);
-            left: calc(var(--spacing-unit) * 2);
+            bottom: max(1rem, env(safe-area-inset-bottom));
+            left: max(1rem, env(safe-area-inset-left));
             width: 40px;
             height: 30px;
             cursor: pointer;
@@ -227,10 +227,6 @@
             align-items: flex-end;
             padding: 2px;
             text-decoration: none;
-        }
-
-        .audio-controls:hover .equalizer-bar {
-            opacity: 1;
         }
 
         .equalizer-bar {
@@ -276,19 +272,9 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Mobile Styles */
         @media (max-width: 768px) {
-            body {
-                padding: calc(var(--spacing-unit));
-                min-height: -webkit-fill-available;
-            }
-
-            .container {
-                gap: calc(var(--spacing-unit));
-                width: 95%;
-                padding: calc(var(--spacing-unit));
-                margin-top: env(safe-area-inset-top);
-                margin-bottom: env(safe-area-inset-bottom);
+            .content-wrapper {
+                padding: 1rem;
             }
             
             .main-title {
@@ -314,75 +300,72 @@
                 width: min(300px, 85vw);
                 height: min(300px, 85vw);
             }
-
-            .audio-controls {
-                bottom: max(calc(var(--spacing-unit) * 2), env(safe-area-inset-bottom));
-                left: max(calc(var(--spacing-unit) * 2), env(safe-area-inset-left));
-                transform: scale(1.2);
-            }
-
-            .candle {
-                transform: scale(0.9);
-            }
         }
 
-        /* Small Mobile Styles */
-        @media (max-width: 480px) {
-            body {
-                padding: calc(var(--spacing-unit) * 0.5);
-            }
-
-            .container {
-                padding: calc(var(--spacing-unit) * 0.8);
-                gap: calc(var(--spacing-unit) * 0.8);
-            }
-
-            .image-carousel {
-                width: min(250px, 80vw);
-                height: min(250px, 80vw);
-            }
-        }
-
-        /* Landscape Mode */
-        @media (max-height: 500px) and (orientation: landscape) {
-            .container {
-                padding: calc(var(--spacing-unit));
-                gap: calc(var(--spacing-unit));
+        @media (max-height: 600px) {
+            .content-wrapper {
+                padding: 0.5rem;
             }
 
             .image-carousel {
                 width: min(200px, 50vh);
                 height: min(200px, 50vh);
-                margin: calc(var(--spacing-unit) * 0.5) auto;
             }
 
             .candle {
                 transform: scale(0.7);
-                margin: calc(var(--spacing-unit)) auto;
+                margin: 0.5rem auto;
             }
 
             .bike-animation {
                 width: 100px;
-                margin: calc(var(--spacing-unit)) auto;
-            }
-
-            .memorial-text {
-                font-size: clamp(0.7rem, 2.5vw, 1rem);
-            }
-        }
-
-        /* Fix for iOS Safari viewport height issue */
-        @supports (-webkit-touch-callout: none) {
-            .container {
-                min-height: -webkit-fill-available;
+                margin: 0.5rem auto;
             }
         }
     </style>
 </head>
 <body>
-    <video id="background-video" autoplay loop muted playsinline>
-        <source src="./vid/vid.mp4" type="video/mp4">
+    <!-- Video Background -->
+    <video id="background-video" playsinline autoplay muted loop preload="auto">
+        <source src="/vid/vid.mp4" type="video/mp4">
+        <source src="vid/vid.mp4" type="video/mp4">
+        <source src="../vid/vid.mp4" type="video/mp4">
     </video>
+
+    <script>
+        // טיפול בווידאו ברקע
+        document.addEventListener('DOMContentLoaded', function() {
+            const video = document.getElementById('background-video');
+            
+            if (video) {
+                // בדיקה שהווידאו נטען
+                video.addEventListener('error', function(e) {
+                    console.error('Error loading video:', e);
+                    // אם יש שגיאה בטעינת הווידאו, נוסיף רקע חלופי
+                    document.body.style.background = 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)';
+                });
+
+                video.addEventListener('loadeddata', function() {
+                    console.log('Video loaded successfully');
+                    video.play();
+                });
+
+                // ניסיון להפעיל את הווידאו
+                const playPromise = video.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => {
+                        console.log("Video autoplay prevented:", error);
+                    });
+                }
+
+                // הגדרות הווידאו
+                video.playbackRate = 0.75;
+            } else {
+                console.error('Video element not found');
+                document.body.style.background = 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)';
+            }
+        });
+    </script>
 
     <div class="loading-overlay">
         <div class="loader"></div>
@@ -401,7 +384,7 @@
         <div class="equalizer-bar"></div>
     </a>
 
-    <div class="container">
+    <div class="content-wrapper">
         <div class="candle">
             <div class="flame"></div>
             <div class="wick"></div>
@@ -423,7 +406,6 @@
     </div>
 
     <script>
-        // הגדרת נתיבי התמונות
         const IMAGES_CONFIG = {
             additionalImages: [
                 { path: "./images/0.jpg", alt: "גילי בשלג" },
@@ -444,13 +426,11 @@
             ]
         };
 
-        // טיפול בשגיאות טעינת תמונות
         function handleImageError(img) {
             console.error(`Failed to load image: ${img.src}`);
             img.style.display = 'none';
         }
 
-        // יצירת אלמנטי התמונות
         function createImageElements() {
             const carousel = document.querySelector('.image-carousel');
             
@@ -460,7 +440,6 @@
                 img.src = image.path;
                 img.alt = image.alt;
                 img.className = 'carousel-image';
-                // הגדרת התמונה הראשונה כאקטיבית
                 if (index === 0) {
                     img.classList.add('active');
                 }
@@ -469,7 +448,6 @@
             });
         }
 
-        // החלפת תמונות אוטומטית
         function rotateImages() {
             const images = document.querySelectorAll('.carousel-image');
             let currentIndex = 0;
@@ -481,75 +459,47 @@
             }, 5000);
         }
 
-        // הצגת התוכן
         function showContent() {
-            document.querySelector(".container").style.opacity = "1";
             setTimeout(() => {
-                document.getElementById("memorialText").style.opacity = "1";
-            }, 500);
+                document.querySelector(".loading-overlay").style.opacity = "0";
+                setTimeout(() => {
+                    document.querySelector(".loading-overlay").style.display = "none";
+                    document.getElementById("memorialText").style.opacity = "1";
+                }, 500);
+            }, 1000);
         }
 
-        // הפעלת/עצירת המוזיקה
-        const music = document.getElementById("bgMusic");
-        music.volume = 0.4;
-        let isPlaying = false;
-
-        function toggleMusic() {
-            const audioControl = document.querySelector('.audio-controls');
-            if (isPlaying) {
-                music.pause();
-                audioControl.classList.remove('playing');
-            } else {
-                music.play();
-                audioControl.classList.add('playing');
-            }
-            isPlaying = !isPlaying;
-        }
-
-        // טיפול בגובה המסך במובייל
-        function setMobileHeight() {
-            let vh = window.innerHeight * 0.01;
-            document.documentElement.style.setProperty('--vh', `${vh}px`);
-        }
-
-        // אתחול העמוד
         window.addEventListener('load', () => {
-            setMobileHeight();
-
-            // עדכון גובה המסך בעת שינוי גודל המסך או סיבוב המכשיר
-            window.addEventListener('resize', () => {
-                setMobileHeight();
-            });
-
-            // עדכון גובה המסך בעת שינוי כיוון המסך
-            window.addEventListener('orientationchange', () => {
-                setTimeout(setMobileHeight, 100);
-            });
-            // הגדרת מהירות הוידאו
             const video = document.getElementById('background-video');
             if (video) {
                 video.playbackRate = 0.75;
             }
 
-            // התחלת הטעינה
-            setTimeout(() => {
-                const loadingOverlay = document.querySelector(".loading-overlay");
-                if (loadingOverlay) {
-                    loadingOverlay.style.opacity = "0";
-                    setTimeout(() => {
-                        loadingOverlay.style.display = "none";
-                        // אתחול הקרוסלה והצגת התוכן
-                        createImageElements();
-                        rotateImages();
-                        showContent();
-                    }, 500);
-                }
-            }, 1000);
+            // התחלת טעינת התמונות
+            createImageElements();
+            rotateImages();
+            showContent();
+
+            // טיפול בגובה המסך במובייל
+            function setMobileHeight() {
+                let vh = window.innerHeight * 0.01;
+                document.documentElement.style.setProperty('--vh', `${vh}px`);
+            }
+
+            setMobileHeight();
+            window.addEventListener('resize', setMobileHeight);
+            window.addEventListener('orientationchange', () => {
+                setTimeout(setMobileHeight, 100);
+            });
 
             // ניסיון להפעיל מוזיקה
-            music.play().catch(function(error) {
-                console.log("Auto-play was prevented");
-            });
+            const music = document.getElementById("bgMusic");
+            if (music) {
+                music.volume = 0.4;
+                music.play().catch(function(error) {
+                    console.log("Auto-play was prevented");
+                });
+            }
         });
     </script>
 </body>
