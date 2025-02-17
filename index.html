@@ -2,8 +2,11 @@
 <html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="description" content="דף זיכרון לגילי דה פז">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="white">
     <title>לזכר גילי דה פז</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -52,6 +55,7 @@
             padding: calc(var(--spacing-unit) * 2);
             overflow: hidden;
             position: relative;
+            background: var(--background);
         }
 
         #background-video {
@@ -82,6 +86,7 @@
             padding: calc(var(--spacing-unit) * 2);
             background: rgba(255, 255, 255, 0.85);
             border-radius: 20px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
         }
 
         .memorial-date {
@@ -155,6 +160,7 @@
             align-items: center;
             justify-content: center;
             padding: 0;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
 
         .carousel-image {
@@ -181,13 +187,7 @@
             margin: 0 auto;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
             font-weight: 400;
-        }
-
-        .bike-animation {
-            width: min(200px, 50vw);
-            margin: calc(var(--spacing-unit) * 2) auto;
-            animation: bikeMove 4s ease-in-out infinite;
-            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));
+            transition: opacity 1s ease-in-out;
         }
 
         @keyframes bikeMove {
@@ -198,6 +198,15 @@
             100% { transform: translate(0, 0) rotate(0); }
         }
 
+        .bike-animation {
+            width: 200px;
+            height: auto;
+            display: block;
+            margin: calc(var(--spacing-unit) * 2) auto;
+            animation: bikeMove 4s ease-in-out infinite;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));
+        }
+
         @keyframes flicker {
             0%, 100% { transform: scale(1) rotate(-2deg); opacity: 0.9; }
             25% { transform: scale(1.1) rotate(2deg); opacity: 1; }
@@ -205,18 +214,23 @@
             75% { transform: scale(1.05) rotate(1deg); opacity: 0.95; }
         }
 
-        .equalizer-container {
+        .audio-controls {
             position: fixed;
             bottom: calc(var(--spacing-unit) * 2);
             left: calc(var(--spacing-unit) * 2);
             width: 40px;
             height: 30px;
+            cursor: pointer;
+            z-index: 1000;
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
             padding: 2px;
-            cursor: pointer;
-            z-index: 1000;
+            text-decoration: none;
+        }
+
+        .audio-controls:hover .equalizer-bar {
+            opacity: 1;
         }
 
         .equalizer-bar {
@@ -224,62 +238,143 @@
             background: var(--highlight);
             opacity: 0.7;
             border-radius: 2px;
+            height: 8px;
+            animation: equalize 1s ease-in-out infinite;
         }
 
-        .equalizer-bar:nth-child(1) { animation: equalize 1s ease-in-out infinite; }
-        .equalizer-bar:nth-child(2) { animation: equalize 1s ease-in-out infinite 0.2s; }
-        .equalizer-bar:nth-child(3) { animation: equalize 1s ease-in-out infinite 0.4s; }
-        .equalizer-bar:nth-child(4) { animation: equalize 1s ease-in-out infinite 0.6s; }
-        .equalizer-bar:nth-child(5) { animation: equalize 1s ease-in-out infinite 0.8s; }
+        .equalizer-bar:nth-child(1) { animation-delay: 0.0s; }
+        .equalizer-bar:nth-child(2) { animation-delay: 0.2s; }
+        .equalizer-bar:nth-child(3) { animation-delay: 0.4s; }
+        .equalizer-bar:nth-child(4) { animation-delay: 0.6s; }
+        .equalizer-bar:nth-child(5) { animation-delay: 0.8s; }
 
         @keyframes equalize {
             0%, 100% { height: 8px; }
             50% { height: 25px; }
         }
 
+        .loading-overlay {
+            position: fixed;
+            inset: 0;
+            background: var(--background);
+            display: grid;
+            place-items: center;
+            z-index: 2000;
+            transition: opacity 0.5s ease-out;
+        }
+
+        .loader {
+            width: clamp(2rem, 5vw, 3rem);
+            height: clamp(2rem, 5vw, 3rem);
+            border: calc(var(--spacing-unit) * 0.3) solid var(--highlight);
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Mobile Styles */
         @media (max-width: 768px) {
             body {
                 padding: calc(var(--spacing-unit));
+                min-height: -webkit-fill-available;
             }
 
             .container {
                 gap: calc(var(--spacing-unit));
                 width: 95%;
                 padding: calc(var(--spacing-unit));
+                margin-top: env(safe-area-inset-top);
+                margin-bottom: env(safe-area-inset-bottom);
             }
             
             .main-title {
                 font-size: clamp(1.2rem, 4vw, 1.8rem);
+                padding: 0 10px;
             }
             
             .memorial-date {
                 font-size: clamp(0.7rem, 3vw, 1rem);
+                padding: 0 10px;
             }
             
             .memorial-text {
                 font-size: clamp(0.8rem, 3vw, 1.1rem);
+                padding: 0 15px;
             }
 
-            #background-video {
+            .bike-animation {
+                width: 150px;
+            }
+
+            .image-carousel {
+                width: min(300px, 85vw);
+                height: min(300px, 85vw);
+            }
+
+            .audio-controls {
+                bottom: max(calc(var(--spacing-unit) * 2), env(safe-area-inset-bottom));
+                left: max(calc(var(--spacing-unit) * 2), env(safe-area-inset-left));
                 transform: scale(1.2);
             }
 
             .candle {
-                transform: scale(0.8);
+                transform: scale(0.9);
             }
         }
 
+        /* Small Mobile Styles */
         @media (max-width: 480px) {
             body {
                 padding: calc(var(--spacing-unit) * 0.5);
             }
 
             .container {
-                padding: calc(var(--spacing-unit) * 0.5);
+                padding: calc(var(--spacing-unit) * 0.8);
+                gap: calc(var(--spacing-unit) * 0.8);
+            }
+
+            .image-carousel {
+                width: min(250px, 80vw);
+                height: min(250px, 80vw);
+            }
+        }
+
+        /* Landscape Mode */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .container {
+                padding: calc(var(--spacing-unit));
+                gap: calc(var(--spacing-unit));
+            }
+
+            .image-carousel {
+                width: min(200px, 50vh);
+                height: min(200px, 50vh);
+                margin: calc(var(--spacing-unit) * 0.5) auto;
             }
 
             .candle {
                 transform: scale(0.7);
+                margin: calc(var(--spacing-unit)) auto;
+            }
+
+            .bike-animation {
+                width: 100px;
+                margin: calc(var(--spacing-unit)) auto;
+            }
+
+            .memorial-text {
+                font-size: clamp(0.7rem, 2.5vw, 1rem);
+            }
+        }
+
+        /* Fix for iOS Safari viewport height issue */
+        @supports (-webkit-touch-callout: none) {
+            .container {
+                min-height: -webkit-fill-available;
             }
         }
     </style>
@@ -289,13 +384,16 @@
         <source src="./vid/vid.mp4" type="video/mp4">
     </video>
 
-    <audio id="bgMusic" loop autoplay>
-        <source src="./music/progrom.mp3" type="audio/mpeg">
+    <div class="loading-overlay">
+        <div class="loader"></div>
+    </div>
+
+    <audio id="bgMusic" loop>
+        <source src="./music/Progrom-Dear_Brother.mp3" type="audio/mpeg">
+        הדפדפן שלך אינו תומך בנגינת מוזיקה.
     </audio>
 
-    <a href="https://www.youtube.com/watch?v=zz0cvJ_5TYQ&list=RDzz0cvJ_5TYQ&start_radio=1&ab_channel=Progrom" 
-       target="_blank" 
-       class="equalizer-container">
+    <a href="https://www.youtube.com/watch?v=zz0cvJ_5TYQ&ab_channel=Progrom" target="_blank" class="audio-controls">
         <div class="equalizer-bar"></div>
         <div class="equalizer-bar"></div>
         <div class="equalizer-bar"></div>
@@ -323,76 +421,55 @@
 
         <img src="./images/bike.png" alt="אופנוע" class="bike-animation">
     </div>
+
     <script>
+        // הגדרת נתיבי התמונות
         const IMAGES_CONFIG = {
-            mainImage: {
-                path: "./images/gil.jpeg",
-                alt: "תמונה ראשית של גילי"
-            },
             additionalImages: [
-                { path: "images/1.jpg", alt: "תמונה 1" },
-                { path: "images/2.jpg", alt: "תמונה 2" },
-                { path: "images/3.jpg", alt: "תמונה 3" },
-                { path: "images/4.jpg", alt: "תמונה 4" },
-                { path: "./images/5.jpg", alt: "תמונה 5" },
-                { path: "./images/6.jpg", alt: "תמונה 6" },
-                { path: "./images/7.jpg", alt: "תמונה 7" },
-                { path: "./images/8.jpg", alt: "תמונה 8" },
-                { path: "./images/9.jpg", alt: "תמונה 9" },
-                { path: "./images/10.jpg", alt: "תמונה 10" },
-                { path: "./images/11.jpg", alt: "תמונה 11" },
-                { path: "./images/12.jpg", alt: "תמונה 12" },
-                { path: "./images/13.jpg", alt: "תמונה 13" },
-                { path: "./images/14.jpg", alt: "תמונה 14" },
-                { path: "./images/15.jpg", alt: "תמונה 15" },
-                { path: "./images/16.jpg", alt: "תמונה 16" },
-                { path: "./images/17.jpg", alt: "תמונה 17" },
-                { path: "./images/18.jpg", alt: "תמונה 18" },
-                { path: "./images/19.jpg", alt: "תמונה 19" }
+                { path: "./images/0.jpg", alt: "גילי בשלג" },
+                { path: "./images/1.jpg", alt: "גילי בשלג" },
+                { path: "./images/2.jpg", alt: "גילי בטיול" },
+                { path: "./images/3.jpg", alt: "גילי מחייך" },
+                { path: "./images/5.jpg", alt: "גילי עם חברים" },
+                { path: "./images/7.jpg", alt: "גילי בבית" },
+                { path: "./images/8.jpg", alt: "גילי בטבע" },
+                { path: "./images/9.jpg", alt: "גילי בחגיגה" },
+                { path: "./images/10.jpg", alt: "גילי בעבודה" },
+                { path: "./images/12.jpg", alt: "גילי בנסיעה" },
+                { path: "./images/13.jpg", alt: "גילי בים" },
+                { path: "./images/14.jpg", alt: "גילי במסעדה" },
+                { path: "./images/17.jpg", alt: "גילי עם חברים" },
+                { path: "./images/18.jpg", alt: "גילי בחו״ל" },
+                { path: "./images/20.jpg", alt: "גילי מחייך" }
             ]
         };
 
-        window.addEventListener('load', () => {
-            const video = document.getElementById('background-video');
-            video.playbackRate = 0.75;
+        // טיפול בשגיאות טעינת תמונות
+        function handleImageError(img) {
+            console.error(`Failed to load image: ${img.src}`);
+            img.style.display = 'none';
+        }
 
-            const music = document.getElementById("bgMusic");
-            music.volume = 0.4;
-            music.play().catch(function(error) {
-                console.log("Auto-play was prevented");
-            });
-
-            setTimeout(() => {
-                document.querySelector(".loading-overlay")?.style.opacity = "0";
-                setTimeout(() => {
-                    document.querySelector(".loading-overlay")?.style.display = "none";
-                    document.querySelector(".container").style.opacity = "1";
-                    setTimeout(showContent, 500);
-                }, 500);
-            }, 1000);
-
-            createImageElements();
-            rotateImages();
-        });
-
+        // יצירת אלמנטי התמונות
         function createImageElements() {
             const carousel = document.querySelector('.image-carousel');
             
-            const firstImg = document.createElement('img');
-            firstImg.src = IMAGES_CONFIG.mainImage.path;
-            firstImg.alt = IMAGES_CONFIG.mainImage.alt;
-            firstImg.className = 'carousel-image active';
-            carousel.appendChild(firstImg);
-            
-            IMAGES_CONFIG.additionalImages.forEach((image) => {
+            // הוספת התמונות
+            IMAGES_CONFIG.additionalImages.forEach((image, index) => {
                 const img = document.createElement('img');
                 img.src = image.path;
                 img.alt = image.alt;
                 img.className = 'carousel-image';
+                // הגדרת התמונה הראשונה כאקטיבית
+                if (index === 0) {
+                    img.classList.add('active');
+                }
+                img.onerror = () => handleImageError(img);
                 carousel.appendChild(img);
             });
         }
 
+        // החלפת תמונות אוטומטית
         function rotateImages() {
             const images = document.querySelectorAll('.carousel-image');
             let currentIndex = 0;
@@ -404,9 +481,76 @@
             }, 5000);
         }
 
+        // הצגת התוכן
         function showContent() {
-            document.getElementById("memorialText").style.opacity = "1";
+            document.querySelector(".container").style.opacity = "1";
+            setTimeout(() => {
+                document.getElementById("memorialText").style.opacity = "1";
+            }, 500);
         }
+
+        // הפעלת/עצירת המוזיקה
+        const music = document.getElementById("bgMusic");
+        music.volume = 0.4;
+        let isPlaying = false;
+
+        function toggleMusic() {
+            const audioControl = document.querySelector('.audio-controls');
+            if (isPlaying) {
+                music.pause();
+                audioControl.classList.remove('playing');
+            } else {
+                music.play();
+                audioControl.classList.add('playing');
+            }
+            isPlaying = !isPlaying;
+        }
+
+        // טיפול בגובה המסך במובייל
+        function setMobileHeight() {
+            let vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        }
+
+        // אתחול העמוד
+        window.addEventListener('load', () => {
+            setMobileHeight();
+
+            // עדכון גובה המסך בעת שינוי גודל המסך או סיבוב המכשיר
+            window.addEventListener('resize', () => {
+                setMobileHeight();
+            });
+
+            // עדכון גובה המסך בעת שינוי כיוון המסך
+            window.addEventListener('orientationchange', () => {
+                setTimeout(setMobileHeight, 100);
+            });
+            // הגדרת מהירות הוידאו
+            const video = document.getElementById('background-video');
+            if (video) {
+                video.playbackRate = 0.75;
+            }
+
+            // התחלת הטעינה
+            setTimeout(() => {
+                const loadingOverlay = document.querySelector(".loading-overlay");
+                if (loadingOverlay) {
+                    loadingOverlay.style.opacity = "0";
+                    setTimeout(() => {
+                        loadingOverlay.style.display = "none";
+                        // אתחול הקרוסלה והצגת התוכן
+                        createImageElements();
+                        rotateImages();
+                        showContent();
+                    }, 500);
+                }
+            }, 1000);
+
+            // ניסיון להפעיל מוזיקה
+            music.play().catch(function(error) {
+                console.log("Auto-play was prevented");
+            });
+        });
     </script>
 </body>
 </html>
