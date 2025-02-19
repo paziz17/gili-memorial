@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="דף זיכרון לגילי דה פז">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="white">
+    <title>לזכר גילי דה פז</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=David+Libre:wght@400;700&family=Heebo:wght@300;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --vh: 1vh;
+            --background: #ffffff;
+            --text: #7a7a7a;
+            --highlight: #636363;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --spacing-unit: max(0.8vh, 6px);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            font-size: 16px;
+            height: 100%;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'David Libre', serif;
+            color: var(--text);
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: var(--background);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .content-wrapper {
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.7);
+            padding: max(2rem, 4vh) max(1rem, 2vw);
+            gap: max(1.5rem, 3vh);
+            position: relative;
+            z-index: 1;
+        }
+
+        .memorial-date {
+            font-size: clamp(0.8rem, 3vw, 1.2rem);
+            font-weight: 400;
+            color: var(--highlight);
+            text-align: center;
+            opacity: 0.9;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .main-title {
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            font-weight: 700;
+            color: var(--highlight);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            line-height: 1.2;
+            text-align: center;
+        }
+
+        .candle {
+            width: min(60px, 15vw);
+            height: min(120px, 30vw);
+            position: relative;
+            margin: min(1rem, 2vh) auto;
+        }
+
+        .flame {
+            position: absolute;
+            width: min(20px, 5vw);
+            height: min(40px, 10vw);
+            background: linear-gradient(#ffdd44, #ff8844);
+            border-radius: 50% 50% 20% 20%;
+            top: min(-20px, -5vw);
+            left: min(20px, 5vw);
+            animation: flicker 1s ease-in-out infinite alternate;
+            transform-origin: 50% 90%;
+            box-shadow: 0 0 20px #ff6600, 0 0 40px #ff8844;
+        }
+
+        .wick {
+            position: absolute;
+            width: min(4px, 1vw);
+            height: min(12px, 3vw);
+            background: #2c2c2c;
+            top: min(20px, 5vw);
+            left: min(28px, 7vw);
+        }
+
+        .wax {
+            position: absolute;
+            width: min(30px, 7.5vw);
+            height: min(90px, 22.5vw);
+            background: linear-gradient(to right, #ddd, #fff, #ddd);
+            border-radius: 4px;
+            bottom: 0;
+            left: min(15px, 3.75vw);
+            box-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .image-carousel {
+            width: min(350px, 85vw);
+            height: min(350px, 85vw);
+            position: relative;
+            overflow: hidden;
+            border-radius: 50%;
+            margin: min(1rem, 2vh) auto;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .carousel-image {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            object-fit: cover;
+        }
+
+        .carousel-image.active {
+            opacity: 1;
+        }
+
+        .memorial-text {
+            font-size: clamp(0.9rem, 3.5vw, 1.2rem);
+            line-height: 1.6;
+            color: var(--text);
+            white-space: pre-line;
+            text-align: center;
+            opacity: 0;
+            max-width: min(90%, 800px);
+            margin: 0 auto;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            font-weight: 400;
+            transition: opacity 1s ease-in-out;
+            padding: 0 min(1rem, 2vw);
+        }
+
+        .bike-animation {
+            width: min(200px, 50vw);
+            height: auto;
+            display: block;
+            margin: min(1rem, 2vh) auto;
+            animation: bikeMove 4s ease-in-out infinite;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));
+        }
+
+        .audio-controls {
+            position: fixed;
+            bottom: max(1rem, env(safe-area-inset-bottom));
+            left: max(1rem, env(safe-area-inset-left));
+            width: min(40px, 10vw);
+            height: min(30px, 7.5vw);
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding: 2px;
+            text-decoration: none;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 5px;
+            backdrop-filter: blur(5px);
+        }
+
+        .equalizer-bar {
+            width: min(4px, 1vw);
+            background: var(--highlight);
+            opacity: 0.7;
+            border-radius: 2px;
+            height: min(8px, 2vw);
+            animation: equalize 1s ease-in-out infinite;
+        }
+
+        @keyframes equalize {
+            0%, 100% { height: min(8px, 2vw); }
+            50% { height: min(25px, 6.25vw); }
+        }
+
+        @keyframes bikeMove {
+            0% { transform: translate(0, 0) rotate(0); }
+            25% { transform: translate(0, -5px) rotate(1deg); }
+            50% { transform: translate(0, 0) rotate(0); }
+            75% { transform: translate(0, -5px) rotate(-1deg); }
+            100% { transform: translate(0, 0) rotate(0); }
+        }
+
+        .loading-overlay {
+            position: fixed;
+            inset: 0;
+            background: var(--background);
+            display: grid;
+            place-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease-out;
+        }
+
+        .loader {
+            width: min(3rem, 10vw);
+            height: min(3rem, 10vw);
+            border: min(3px, 0.8vw) solid var(--highlight);
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Mobile Specific Styles */
+        @media (max-width: 768px) {
+            .content-wrapper {
+                padding: max(1rem, 2vh) max(0.5rem, 1vw);
+                gap: max(1rem, 2vh);
+            }
+            
+            .memorial-text {
+                font-size: clamp(0.8rem, 4vw, 1.1rem);
+            }
+
+            .image-carousel {
+                width: min(300px, 80vw);
+                height: min(300px, 80vw);
+            }
+        }
+
+        /* Landscape Mode */
+        @media (max-height: 600px) and (orientation: landscape) {
+            .content-wrapper {
+                padding: max(0.5rem, 1vh);
+                gap: max(0.5rem, 1vh);
+            }
+
+            .image-carousel {
+                width: min(200px, 40vh);
+                height: min(200px, 40vh);
+            }
+
+            .candle {
+                transform: scale(0.7);
+            }
+
+            .bike-animation {
+                width: min(100px, 20vh);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-overlay">
+        <div class="loader"></div>
+    </div>
+
+    <audio id="bgMusic" loop autoplay>
+        <source src="./music/Progrom-Dear_Brother.mp3" type="audio/mpeg">
+    </audio>
+
+    <a href="https://www.youtube.com/watch?v=zz0cvJ_5TYQ&ab_channel=Progrom" target="_blank" class="audio-controls">
+        <div class="equalizer-bar"></div>
+        <div class="equalizer-bar"></div>
+        <div class="equalizer-bar"></div>
+        <div class="equalizer-bar"></div>
+        <div class="equalizer-bar"></div>
+    </a>
+
+    <div class="content-wrapper">
+        <h1 class="main-title">לזכר אהובנו גילי דה פז</h1>
+        <div class="memorial-date">1968-2025 | י״ד באייר תשכ״ח - ב׳ בשבט תשפ״ה</div>
+
+        <div class="image-carousel">
+            <!-- Images will be added dynamically -->
+        </div>
+
+        <p id="memorialText" class="memorial-text">נשמה טהורה ואצילית שהאירה את חיינו בחיוך כובש ולב רחב.
+אהבת אדם ונתינה אין קץ היו נר לרגליך.
+השארת חותם עמוק בלב כל מי שזכה להכירך.</p>
+
+        <img src="./images/bike.png" alt="אופנוע" class="bike-animation">
+    </div>
+
+    <script>
+        const IMAGES_CONFIG = {
+            additionalImages: [
+                { path: "./images/0.jpg", alt: "גילי בשלג" },
+                { path: "./images/1.jpg", alt: "גילי בשלג" },
+                { path: "./images/2.jpg", alt: "גילי בטיול" },
+                { path: "./images/3.jpg", alt: "גילי מחייך" },
+                { path: "./images/5.jpg", alt: "גילי עם חברים" },
+                { path: "./images/7.jpg", alt: "גילי בבית" },
+                { path: "./images/8.jpg", alt: "גילי בטבע" },
+                { path: "./images/9.jpg", alt: "גילי בחגיגה" },
+                { path: "./images/10.jpg", alt: "גילי בעבודה" },
+                { path: "./images/12.jpg", alt: "גילי בנסיעה" },
+                { path: "./images/13.jpg", alt: "גילי בים" },
+                { path: "./images/14.jpg", alt: "גילי במסעדה" },
+                { path: "./images/17.jpg", alt: "גילי עם חברים" },
+                { path: "./images/18.jpg", alt: "גילי בחו״ל" },
+                { path: "./images/20.jpg", alt: "גילי מחייך" }
+            ]
+        };
+
+        function handleImageError(img) {
+            console.error(`Failed to load image: ${img.src}`);
+            img.style.display = 'none';
+        }
+
+        function createImageElements() {
+            const carousel = document.querySelector('.image-carousel');
+            
+            IMAGES_CONFIG.additionalImages.forEach((image, index) => {
+                const img = document.createElement('img');
+                img.src = image.path;
+                img.alt = image.alt;
+                img.className = 'carousel-image';
+                if (index === 0) {
+                    img.classList.add('active');
+                }
+                img.onerror = () => handleImageError(img);
+                carousel.appendChild(img);
+            });
+        }
+
+        function rotateImages() {
+            const images = document.querySelectorAll('.carousel-image');
+            let currentIndex = 0;
+
+            setInterval(() => {
+                images[currentIndex].classList.remove('active');
+                currentIndex = (currentIndex + 1) % images.length;
+                images[currentIndex].classList.add('active');
+            }, 5000);
+        }
+
+        function showContent() {
+            setTimeout(() => {
+                document.querySelector(".loading-overlay").style.opacity = "0";
+                setTimeout(() => {
+                    document.querySelector(".loading-overlay").style.display = "none";
+                    document.getElementById("memorialText").style.opacity = "1";
+                }, 500);
+            }, 1000);
+        }
+
+        // טיפול במוזיקה
+        function initializeAudio() {
+            const music = document.getElementById('bgMusic');
+            if (music) {
+                music.volume = 0.4;
+                
+                // ניסיון לנגן מוזיקה באופן אוטומטי
+                const playPromise = music.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => {
+                        console.log("Auto-play prevented");
+                        
+                        // הוספת מאזין ללחיצה על המסך להפעלת המוזיקה
+                        document.addEventListener('click', function initPlay() {
+                            music.play();
+                            document.removeEventListener('click', initPlay);
+                        }, { once: true });
+                    });
+                }
+            }
+        }
+
+        // טיפול בגובה המסך במובייל
+        function setMobileHeight() {
+            let vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        }
+
+        // אתחול העמוד
+        window.addEventListener('load', () => {
+            createImageElements();
+            rotateImages();
+            showContent();
+            initializeAudio();
+            
+            // טיפול בגובה המסך
+            setMobileHeight();
+            window.addEventListener('resize', setMobileHeight);
+            window.addEventListener('orientationchange', () => {
+                setTimeout(setMobileHeight, 100);
+            });
+        });
+
+        // מניעת גלילה אוטומטית בעת שינוי כיוון מסך
+        window.addEventListener('resize', function() {
+            window.scrollTo(0, 0);
+        });
+
+        // מניעת זום בנגיעה כפולה במובייל
+        document.addEventListener('touchstart', function(event) {
+            if (event.touches.length > 1) {
+                event.preventDefault();
+            }
+        }, { passive: false });
+    </script>
+</body>
+</html>
